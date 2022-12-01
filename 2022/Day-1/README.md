@@ -1,7 +1,7 @@
-If your using Replit
+If You're Using Replit
 --
 
-Copy this into your replit ```main.cs``` and make sure your input file is called ```Input.txt```
+Copy this into your Replit ```main.cs``` and make sure your input file is called ```Input.txt```
 ```
 using System;
 using System.IO;
