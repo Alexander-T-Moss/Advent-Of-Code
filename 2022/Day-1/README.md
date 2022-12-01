@@ -51,11 +51,11 @@ class Solution
     for(int x = 0; x < 3; x++)
     {
       maxCal += totalCalories.Max();
-      int maxCalIndex = Array.IndexOf(totalCalories, maxCal);
+      int maxCalIndex = Array.IndexOf(totalCalories, totalCalories.Max());
       totalCalories = totalCalories.Where((e, i) => i != maxCalIndex).ToArray();
     }
     
-    Console.WriteLine("Star 2: " + maxCal);
+    Console.WriteLine("Star 2: " + (maxCal));
   }
 }
 
