@@ -4,7 +4,6 @@ If You're Using Replit
 Copy this into your Replit ```main.cs``` (replacing all of what was in there originally) and make sure your input file is called ```Input.txt```
 ```
 using System;
-using System.Linq;
 
 class Solution
 {
@@ -28,15 +27,15 @@ class Solution
   public int Star1()
   {
     int priority = 0;
+    
     foreach(string line in Input)
     {
-      char[] secondHalf = line.Substring(line.Length/2, line.Length/2).ToCharArray();
-
+      string secondHalf = line.Substring(line.Length/2, line.Length/2);
       foreach(char item in line.Substring(0, line.Length / 2))
       {
-        if(Array.FindIndex(secondHalf, element => element == item) != -1)
+        if(secondHalf.Contains(item))
         {
-          secondHalf = secondHalf.Where(val => val != item).ToArray();
+          secondHalf = secondHalf.Replace(item, ' ');
           priority += GetPriority(item);
         }
       }
@@ -56,7 +55,7 @@ class Solution
       {
         if(Input[groupNumber-1].Contains(item) && leadGroupBag.Contains(item))
         {
-          leadGroupBag = leadGroupBag.Replace(item, Convert.ToChar(" "));
+          leadGroupBag = leadGroupBag.Replace(item, ' ');
           priority += GetPriority(item);
         }
       }
