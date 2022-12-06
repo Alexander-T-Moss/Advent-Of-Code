@@ -2,7 +2,7 @@ If You're Using Replit
 --
 
 Copy this into your Replit ```main.cs``` (replacing all of what was in there originally) and make sure your input file is called ```Input.txt``` and your stacks part of the input is in ```Crates.txt```
-```
+```c#
 using System;
 using System.Collections.Generic;
 using System.IO;
