@@ -2,7 +2,7 @@ If You're Using Replit
 --
 
 Copy this into your Replit ```main.cs``` (replacing all of what was in there originally) and make sure your input file is called ```Input.txt```
-```
+```c#
 using System;
 using System.IO;
 
