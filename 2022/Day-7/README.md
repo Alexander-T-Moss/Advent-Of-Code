@@ -144,9 +144,7 @@ namespace directories
       foreach(Directory directory in Directories)
       {
         if(directory.GetDirectories().Count == 0)
-        {
           directories.Add(directory);
-        }
         
         else
         {
@@ -161,14 +159,10 @@ namespace directories
     public void AddItem(string item)
     {
       if(item.Split(' ')[0] == "dir")
-      {
         Directories.Add(new(item.Split(' ')[1], this));
-      }
       
       else   
-      {
         Files.Add(item);
-      }
     }
 
     // Return size of this directory - including all sub-directories
