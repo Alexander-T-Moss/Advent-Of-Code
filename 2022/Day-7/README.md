@@ -4,88 +4,35 @@ If You're Using Replit
 Copy this into your Replit ```main.cs``` (replacing all of what was in there originally) and make sure your input file is called ```Input.txt```
 ```cs
 using System;
-using System.Collections.Generic;
-using directories;
-
-class FileSystem
-{
-  List<Directory> AllDirectories = new();
-  Directory TopDirectory;
-  
-  public FileSystem(string[] input)
-  {
-    Directory currentDirectory = null;
-    
-    foreach(string command in input)
-    {
-      string[] commandParts = command.Split(' ');
-      
-      // $ cd Logic
-      if(command.Contains("$ cd"))
-      {
-        if(currentDirectory != null)
-          if(commandParts[2] != "..")
-            currentDirectory = currentDirectory.OpenDirectory(commandParts[2]);
-          else
-            currentDirectory = currentDirectory.GetParentDirectory();
-        else
-        {
-          currentDirectory = new(command.Split(' ')[2], null);
-          AllDirectories.Add(currentDirectory);
-          TopDirectory = currentDirectory;
-        }
-      }
-      
-      // File adding logic
-      else if(commandParts[0] != "$")
-        currentDirectory.AddItem(command);
-    }
-
-    // Put all directories in the file system into a list
-    AllDirectories = TopDirectory.GetConnectedDirectories();    
-  }
-
-  public int Star1()
-  {
-    int answer = 0;
-    foreach(Directory directory in AllDirectories)
-    {
-      int directorySize = directory.GetDirectorySize();
-      if(directorySize <= 100000)
-        answer += directorySize;
-    }
-    return answer;
-  }
-
-  public int Star2()
-  {
-    int spaceNeeded = TopDirectory.GetDirectorySize() - 40000000;
-
-    Directory directoryToDelete = AllDirectories[0];
-
-    foreach(Directory directory in AllDirectories)
-    {
-      if(directory.GetDirectorySize() >= spaceNeeded && directoryToDelete.GetDirectorySize() > directory.GetDirectorySize())
-        directoryToDelete = directory;
-    }
-    return directoryToDelete.GetDirectorySize();
-  }
-}
+using filesystem;
 
 class Program {
   public static void Main (string[] args) {
     
     string[] InputArray = System.IO.File.ReadAllLines(@"Input.txt");
-
+    var timer = new System.Diagnostics.Stopwatch();
+    
+    timer.Start();
     FileSystem myFileSystem = new(InputArray);
+    timer.Stop();
+    Console.WriteLine("File System generated in " + $"{timer.ElapsedMilliseconds} ms");
 
-    Console.WriteLine("Star 1: " + myFileSystem.Star1());
-    Console.WriteLine("Star 2: " + myFileSystem.Star2());
+    timer.Reset();
+    timer.Start();
+    int Star1 = myFileSystem.Star1();
+    timer.Stop();
+    Console.WriteLine("Star 1: " + Star1 + $" // Found In {timer.ElapsedMilliseconds} ms");
+
+    timer.Reset();
+    timer.Start();
+    int Star2 = myFileSystem.Star2();
+    timer.Stop();
+    Console.WriteLine("Star 1: " + Star2 + $" // Found In {timer.ElapsedMilliseconds} ms");
   }
 }
 ```
 
-And make a new file called ```directories.cs``` and put this code in their
+Make a new file called ```directories.cs``` and put this code in their
 ```c#
 using System;
 using System.Collections.Generic;
@@ -95,17 +42,19 @@ namespace directories
   class Directory
   {
     string Name;
-    List<Directory> Directories;
     Directory ParentDirectory;
+    
+    List<Directory> Directories;
     List<string> Files;
 
     // Directory constructor
     public Directory(string name, Directory parentDirectory)
     {
       Name = name;
+      ParentDirectory = parentDirectory; 
+      
       Directories = new();
       Files = new();
-      ParentDirectory = parentDirectory; 
     }
 
     // Return name of this directory
@@ -182,3 +131,79 @@ namespace directories
   }
 }
 ```
+
+Make a new file called ```filesystem.cs``` and put this code in their
+```cs
+using System;
+using directories;
+using System.Collections.Generic;
+
+namespace filesystem
+{
+  class FileSystem
+  {
+    List<Directory> AllDirectories = new();
+    Directory TopDirectory;
+    
+    public FileSystem(string[] input)
+    {
+      Directory currentDirectory = null;
+      
+      foreach(string command in input)
+      {
+        string[] commandParts = command.Split(' ');
+        
+        // $ cd logic
+        if(command.Contains("$ cd"))
+        {
+          if(currentDirectory != null)
+            if(commandParts[2] != "..")
+              currentDirectory = currentDirectory.OpenDirectory(commandParts[2]);
+            else
+              currentDirectory = currentDirectory.GetParentDirectory();
+          else
+          {
+            currentDirectory = new(command.Split(' ')[2], null);
+            AllDirectories.Add(currentDirectory);
+            TopDirectory = currentDirectory;
+          }
+        }
+        
+        // File adding logic
+        else if(commandParts[0] != "$")
+          currentDirectory.AddItem(command);
+      }
+  
+      // Put all directories in the file system into a list
+      AllDirectories = TopDirectory.GetConnectedDirectories();    
+    }
+  
+    public int Star1()
+    {
+      int answer = 0;
+      foreach(Directory directory in AllDirectories)
+      {
+        int directorySize = directory.GetDirectorySize();
+        if(directorySize <= 100000)
+          answer += directorySize;
+      }
+      return answer;
+    }
+  
+    public int Star2()
+    {
+      int spaceNeeded = TopDirectory.GetDirectorySize() - 40000000;
+  
+      Directory directoryToDelete = AllDirectories[0];
+  
+      foreach(Directory directory in AllDirectories)
+      {
+        if(directory.GetDirectorySize() >= spaceNeeded && directoryToDelete.GetDirectorySize() > directory.GetDirectorySize())
+          directoryToDelete = directory;
+      }
+      return directoryToDelete.GetDirectorySize();
+    }
+  }
+}
+```
+
